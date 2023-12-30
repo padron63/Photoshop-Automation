@@ -1,0 +1,31 @@
+import win32com.client
+import os
+
+def change_and_save_photoshop(psd_file_path):
+    copied_user_name = "emo"
+    try:
+        psApp = win32com.client.Dispatch("Photoshop.Application")
+        psApp.Open(psd_file_path)
+
+        doc = psApp.Application.ActiveDocument
+        layerText = doc.ArtLayers["Bla"]
+        text_of_layer = layerText.TextItem
+        text_of_layer.contents = copied_user_name
+
+        if copied_user_name:
+            options = win32com.client.Dispatch("Photoshop.ExportOptionsSaveForWeb")
+            options.Format = 6
+            options.Quality = 100
+
+            jpgfile = f"D:/Text_Files/output_projects/{copied_user_name}.jpg"
+            doc.Export(ExportIn=jpgfile, ExportAs=2, Options = options)
+
+    except:
+        print("error occured")
+
+
+
+if __name__ == "__main__":
+    psd_file_path = "D:/Text_Files/ronaldo.psd"
+
+change_and_save_photoshop(psd_file_path)
