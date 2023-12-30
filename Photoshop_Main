@@ -1,0 +1,44 @@
+from psd_tools import PSDImage
+import os
+
+
+def change_text_content_and_save(psd_file_path, layer_name, new_text, output_directory):
+    try:
+        # Open the PSD file
+        psd = PSDImage.open(psd_file_path)
+        if psd:
+            print("Photoshop document executed...")
+
+        # Find the text layer by name
+        text_layer = None
+        for layer in psd:
+            if layer.name == layer_name and hasattr(layer, 'text_data'):
+                text_layer = layer
+                break
+
+        if text_layer:
+            # Change the text content
+            text_layer.text_data.text = new_text
+            print(f"Changed text content of layer '{layer_name}' to: {new_text}")
+
+            # Generate the output filename (PSD format)
+            output_file_name = os.path.basename(psd_file_path)
+            output_file_path = os.path.join(output_directory, output_file_name)
+
+            # Save the modified PSD
+            psd.save(output_file_path)
+            print(f"Saved the modified PSD as: {output_file_path}")
+        else:
+            print(f"Text layer not found: {layer_name}")
+
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+
+
+if __name__ == "__main__":
+    psd_file_path = "D:/Text_Files/dalle.psd"  # Replace with the path to your PSD file
+    layer_name = "emo"  # Replace with the name of the text layer you want to change
+    new_text = "Mehmet Ali"  # Replace with the new text content
+    output_directory = "D:/Text_Files/output_projects"  # Replace with the desired output directory
+
+    change_text_content_and_save(psd_file_path, layer_name, new_text, output_directory)
